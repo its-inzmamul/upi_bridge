@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UPI Pay</title>
+  <!--
+    Deploy this file (or whole upi_bridge folder) to any static HTTPS host
+    (Cloudflare Pages, Netlify, GitHub Pages, etc.) at the site root so this file is at /index.html.
+    Then set in bot .env:
+      UPI_PAY_BRIDGE_PUBLIC_URL=https://your-site.pages.dev
+    (no trailing slash). The bot will open https://your-site.pages.dev/?u=<base64> which redirects to upi://...
+  -->
+  <script>
+    (function () {
+      var u = new URLSearchParams(window.location.search).get("u");
+      if (!u) return;
+      var b64 = u.replace(/-/g, "+").replace(/_/g, "/");
+      while (b64.length % 4) b64 += "=";
+      try {
+        window.location.replace(atob(b64));
+      } catch (e) {
+        document.body.innerHTML =
+          "<p style=\"font-family:system-ui,sans-serif;padding:1rem\">Invalid link. Use the QR from Telegram.</p>";
+      }
+    })();
+  </script>
+</head>
+<body style="font-family: system-ui, sans-serif; padding: 1rem">UPI khol rahe hain…</body>
+</html>
